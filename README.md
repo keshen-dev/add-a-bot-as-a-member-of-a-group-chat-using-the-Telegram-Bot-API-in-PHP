@@ -11,7 +11,7 @@ $bot_token = "YOUR_BOT_TOKEN";
 $chat_id = "GROUP_CHAT_ID";
 
 // URL of the Telegram Bot API
-$url = "https://api.telegram.org/bot$bot_token/";
+$url = "https://api.telegram.org/bot$bot_token/addChatMember";
 
 // Parameters for the API request
 $params = [
@@ -20,10 +20,16 @@ $params = [
 ];
 
 // Send the API request to add the bot to the group chat
-$result = file_get_contents($url . "addChatMember?" . http_build_query($params));
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+ 
 
 // Check if the API request was successful
-if ($result) {
+if ($response) {
     echo "Bot added to group chat!";
 } else {
     echo "Error adding bot to group chat.";
